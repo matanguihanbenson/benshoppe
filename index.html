@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BENSHOPPE | HOME</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        .banner-texts {
+            position: relative;
+            height: 70px;
+            overflow: hidden;
+            margin-top: 300px;
+        }
+
+        .banner-texts h1 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            line-height: 50px;
+            margin: 0;
+            font-size: 50px;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        .banner-texts h1.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #sort-select {
+            height: 40px;
+            border: none;
+            outline: none;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .offer-title {
+            text-align: center;
+            margin-bottom: 50px;
+            margin-top: 40px;
+        }
+
+        .offer-title span {
+            color: red;
+        }
+
+        .offers-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .offers-container img {
+            width: 70%;
+        }
+
+        .offer-detail .image {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 250px;
+        }
+
+        .offers-container .offer-item {
+            border: 1px solid #ddd;
+            text-align: center;
+            position: relative;
+        }
+
+        .offers-container .offer-item .price {
+            text-decoration: line-through;
+        }
+
+        .offers-container .offer-item span {
+            position: absolute;
+            width: 50px;
+            top: -10px;
+            right: -20px;
+        }
+
+        .offer-detail .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .offer-detail .discounted-price {
+            color: red;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .offer-detail .cat {
+            color: #7a7a7a;
+            margin-bottom: 10px;
+        }
+
+        .offer-detail button {
+            width: 100%;
+            height: 40px;
+            margin-top: 20px;
+            background-color: red;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .offer-detail button:hover {
+            opacity: .7;
+        }
+
+        .subscribe {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .subscribe input {
+            width: 70%;
+            height: 40px;
+            text-indent: 10px;
+            outline: none;
+        }
+
+        .subscribe button {
+            height: 40px;
+            border: none;
+            background-color: red;
+            color: white;
+            padding-inline: 20px;
+            cursor: pointer;
+        }
+
+        #error-message {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div><a href="index.html" class="logo">BENSHOPPE</a></div>
+        <div class="user">
+            <div id="user-profile-container"></div>
+            <a href="cart.html"><i class="bx bx-cart"></i><span id="cart-count">0</span></a>
+        </div>
+    </header>
+
+    <div class="home">
+        <div class="banner">
+            <div class="banner-texts">
+                <h1 class="active">Welcome to <b>BENSHOPPE</b></h1>
+                <h1>Find Your <b>Perfect Outfit</b></h1>
+                <h1>Discover <b>Latest Trends</b></h1>
+                <h1>Shop <b>Quality Clothing</b></h1>
+                <h1><b>Exclusive Offers</b> Just for You</h1>
+            </div>
+        </div>
+
+        <div class="categories">
+            <div class="category-item">
+                <ul>
+                    <li><a href="#" class="category-item-active" data-category="all">All</a></li>
+                    <li><a href="#" data-category="shirt">Shirt</a></li>
+                    <li><a href="#" data-category="hoodie">Hoodie</a></li>
+                    <li><a href="#" data-category="jacket">Jacket</a></li>
+                    <li><a href="#" data-category="sweater">Sweater</a></li>
+                </ul>
+            </div>
+
+            <div class="sort-container">
+                <select id="sort-select">
+                    <option value="az">Sort Alphabetically (A-Z)</option>
+                    <option value="za">Sort Alphabetically (Z-A)</option>
+                    <option value="priceLowHigh">Sort by Price (Low to High)</option>
+                    <option value="priceHighLow">Sort by Price (High to Low)</option>
+                </select>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search...">
+            </div>
+        </div>
+
+        <div id="login-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-popup">&times;</span>
+                <h2>Please Log In</h2>
+                <hr>
+                <p>You need to be logged in to add items to the cart.</p>
+                <a href="login.html"><button>Log In</button></a>
+            </div>
+        </div>
+
+        <div id="product-container"></div>
+        <div id="pagination-container"></div>
+
+        <h1 class="offer-title"><span>Ben there, Shopped that</span> - Now at a Discount!</h1>
+        <div class="offers-container" id="offers-container"></div>
+        <div class="subscribe">
+            <div>
+                <h1>New Arrivals & Exclusive Offers!</h1>
+                <p>Subscribe to our newsletter</p>
+                <br>
+                <div class="form"><input type="text" placeholder="youremail@gmail.com" id="emailInput"><button
+                        id="subscribe-button">Subscribe</button></div>
+                <span id="error-message"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="newsletter-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <i class="bx bx-check" style="font-size: 50px;text-align: center;"></i>
+            <p>Added to Newsletter</p>
+        </div>
+    </div>
+
+
+    <div style="text-align: center;width: 100%;height: 50px;line-height: 50px;">BENSHOPPE &copy; 2024 | Mark Benson
+        Matanguihan</div>
+    <script src="showprofile.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productsPerPage = 8;
+            const categories = document.querySelectorAll('.category-item a');
+            const productContainer = document.getElementById('product-container');
+            const searchInput = document.getElementById('search-input');
+            const sortSelect = document.getElementById('sort-select');
+            const cartCountElement = document.getElementById('cart-count');
+            const loginPopup = document.getElementById('login-popup');
+            const closePopup = document.querySelector('.close-popup');
+            const offersContainer = document.getElementById('offers-container');
+            const subscribeButton = document.getElementById('subscribe-button');
+            const newsletterPopup = document.getElementById('newsletter-popup');
+            const closePopupButtons = document.querySelectorAll('.close-popup');
+
+            const emailInput = document.getElementById('emailInput');
+            const errorMessage = document.getElementById('error-message');
+
+            function isValidEmail(email) {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailPattern.test(email);
+            }
+
+            subscribeButton.addEventListener('click', function () {
+                const emailValue = emailInput.value.trim();
+
+                if (!emailValue) {
+                    errorMessage.textContent = 'Email is required.';
+                    errorMessage.style.display = 'block';
+                } else if (!isValidEmail(emailValue)) {
+                    errorMessage.textContent = 'Please enter a valid email address.';
+                    errorMessage.style.display = 'block';
+                } else {
+                    errorMessage.style.display = 'none';
+                    newsletterPopup.style.display = 'block';
+                }
+            });
+
+            closePopupButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const popup = button.closest('.popup');
+                    if (popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+            });
+            let products = [];
+            let offers = [];
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let isLoggedIn = sessionStorage.getItem('username') !== null;
+
+
+            const bannerTexts = document.querySelectorAll('.banner-texts h1');
+            let currentTextIndex = 0;
+
+            function rotateBannerTexts() {
+                bannerTexts.forEach((text, index) => {
+                    text.classList.remove('active');
+                    if (index === currentTextIndex) {
+                        text.classList.add('active');
+                    }
+                });
+                currentTextIndex = (currentTextIndex + 1) % bannerTexts.length;
+            }
+
+            setInterval(rotateBannerTexts, 2000);
+
+            fetch('products.json')
+                .then(response => response.json())
+                .then(data => {
+                    products = data;
+                    displayProducts(products, 1);
+                    updateCartCount();
+                    createPagination(products);
+                })
+                .catch(error => console.error('Error loading products:', error));
+
+            fetch('offers.json')
+                .then(response => response.json())
+                .then(data => {
+                    offers = data;
+                    displayOffers();
+                })
+                .catch(error => console.error('Error loading offers:', error));
+
+            categories.forEach(category => {
+                category.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const selectedCategory = category.getAttribute('data-category');
+
+                    categories.forEach(cat => cat.classList.remove('category-item-active'));
+                    category.classList.add('category-item-active');
+
+                    let filteredProducts = filterProducts(selectedCategory, searchInput.value);
+
+                    filteredProducts = sortProducts(filteredProducts, sortSelect.value);
+
+                    displayProducts(filteredProducts, 1);
+                    createPagination(filteredProducts);
+                });
+            });
+
+            searchInput.addEventListener('input', function () {
+                const selectedCategory = document.querySelector('.category-item a.category-item-active').getAttribute('data-category');
+
+                let filteredProducts = filterProducts(selectedCategory, this.value);
+                filteredProducts = sortProducts(filteredProducts, sortSelect.value);
+
+                displayProducts(filteredProducts, 1);
+                createPagination(filteredProducts);
+            });
+
+            sortSelect.addEventListener('change', function () {
+                const selectedCategory = document.querySelector('.category-item a.category-item-active').getAttribute('data-category');
+
+                let filteredProducts = filterProducts(selectedCategory, searchInput.value);
+
+                filteredProducts = sortProducts(filteredProducts, this.value);
+
+                displayProducts(filteredProducts, 1);
+                createPagination(filteredProducts);
+            });
+
+            function displayProducts(products, page) {
+                productContainer.innerHTML = '';
+                const startIndex = (page - 1) * productsPerPage;
+                const endIndex = startIndex + productsPerPage;
+                const displayedProducts = products.slice(startIndex, endIndex);
+                displayedProducts.forEach((product, index) => {
+                    const productElement = document.createElement('div');
+                    productElement.className = 'product-item';
+                    productElement.innerHTML = `
+                    
+                        <div class="product-detail">
+                            <img src='${product.image}' alt='${product.name}'>
+                            <h3>${product.name}</h3>
+                            <p class='cat'>${product.category}</p>
+                            <p class='price'>$${product.price}</p>
+                            <p class='review'>${product.reviews}</p>
+                        </div>
+                        <button class="add-to-cart-btn" data-id="${product.id}">Add to cart</button>
+                    `;
+
+                    const delayClass = `delay-${(index % 5) + 1}`;
+                    productElement.classList.add(delayClass);
+
+                    productContainer.appendChild(productElement);
+
+                    setTimeout(() => {
+                        productElement.classList.add('visible');
+                    }, 100);
+
+                    productElement.addEventListener('click', function () {
+                        const productId = product.id;
+                        window.location.href = `product.html?id=${productId}`;
+                    });
+                });
+
+                const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+                addToCartButtons.forEach(button => {
+                    button.addEventListener('click', function (event) {
+                        event.stopPropagation();
+                        const productId = this.getAttribute('data-id');
+                        if (isLoggedIn) {
+                            addToCart(productId);
+                        } else {
+                            showLoginPopup();
+                        }
+                    });
+                });
+            }
+
+            function displayOffers() {
+                offersContainer.innerHTML = '';
+
+                offers.forEach(offer => {
+                    const offerElement = document.createElement('div');
+                    offerElement.className = 'offer-item';
+                    offerElement.innerHTML = `
+                        <span><img src='img/10-percent.png'></span>
+                        <div class="offer-detail">
+                            <div class="image">
+                                <img src="${offer.image}" alt="${offer.name}">
+                            </div>
+                            <div class="container">
+                                <div class="cat">${offer.category}</div>
+                                <h3>${offer.name}</h3>
+                                <div class="price-container">
+                                    <p class="price">$${offer.price.toFixed(2)}</p>
+                                    <p class="discounted-price">$${offer.discounted_price.toFixed(2)}</p>
+                                </div>
+                                <button class="add-to-cart" data-id="${offer.id}">Add to Cart</button>
+                            </div>
+                        </div>
+                    `;
+                    offersContainer.appendChild(offerElement);
+                });
+
+                const addToCartButtons = document.querySelectorAll('.offer-item .add-to-cart');
+                addToCartButtons.forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        const offerId = button.dataset.id;
+                        if (isLoggedIn) {
+                            addToCart(offerId);
+                        } else {
+                            showLoginPopup();
+                        }
+                    });
+                });
+            }
+
+            function createPagination(products, currentPage = 1) {
+                const totalPages = Math.ceil(products.length / productsPerPage);
+                const paginationContainer = document.getElementById('pagination-container');
+                paginationContainer.innerHTML = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.textContent = i;
+
+                    if (i === 1) {
+                        pageButton.classList.add('active');
+                    }
+                    if (i === currentPage) {
+                        pageButton.classList.add('active');
+                    }
+                    pageButton.addEventListener('click', function () {
+                        displayProducts(products, i);
+                        updateActivePageButton(paginationContainer, i);
+                    });
+                    paginationContainer.appendChild(pageButton);
+                }
+            }
+
+            function updateActivePageButton(container, currentPage) {
+                const buttons = container.querySelectorAll('button');
+                buttons.forEach(button => {
+                    if (button.textContent === currentPage.toString()) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+            }
+
+            function filterProducts(category, searchQuery) {
+                return products.filter(product => {
+                    const categoryNameMatch = category === 'all' || product.category.toLowerCase() === category.toLowerCase();
+                    const searchMatch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+                    return categoryNameMatch && searchMatch;
+                });
+            }
+
+            function sortProducts(products, sortBy) {
+                return products.slice().sort((a, b) => {
+                    switch (sortBy) {
+                        case 'az':
+                            return a.name.localeCompare(b.name);
+                        case 'za':
+                            return b.name.localeCompare(a.name);
+                        case 'priceLowHigh':
+                            return a.price - b.price;
+                        case 'priceHighLow':
+                            return b.price - a.price;
+                        default:
+                            return 0;
+                    }
+                });
+            }
+
+            function addToCart(productId) {
+                const product = products.find(product => product.id === productId) || offers.find(offer => offer.id === productId);
+                const cartItem = cart.find(item => item.id === productId);
+
+                const price = product.discounted_price || product.price;
+
+                if (cartItem) {
+                    cartItem.quantity += 1;
+                } else {
+                    cart.push({ ...product, price: price, quantity: 1 });
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+            }
+
+            function updateCartCount() {
+                cartCountElement.textContent = cart.length;
+            }
+
+            function showLoginPopup() {
+                loginPopup.style.display = 'flex';
+            }
+
+            closePopup.addEventListener('click', function () {
+                loginPopup.style.display = 'none';
+            });
+
+            updateCartCount();
+        });
+    </script>
+</body>
+
+</html>

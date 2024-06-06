@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BENSHOPPE | PRODUCT</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/products.css">
+    <link rel="stylesheet" href="boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: fadeIn 0.5s forwards, fadeOut 1s 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+            }
+        }
+
+        .toast-error {
+            background-color: #dc3545;
+            /* Red color for error toasts */
+        }
+
+        .image {
+            background-size: contain;
+        }
+        button{
+            height: 40px;
+            padding-inline: 20px;
+            color:white;
+            background-color: red;
+            border: none;
+            margin-top: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div><a href="index.html" class="logo">BENSHOPPE</a></div>
+        <div class="user">
+            <div id="user-profile-container"></div>
+            <a href="cart.html"><i class="bx bx-cart"></i><span id="cart-count">0</span></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-details">
+            <div class="image"></div>
+            <div class="details">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a> / <span class="breadcrumb-current">Item Name</span>
+                </div>
+                <div class="description">
+                    <div class="title">
+                        <h1>Loading...</h1>
+                    </div>
+                    <div class="ratings"><a href="">Loading...</a></div>
+                    <div class="size-info">Size: <span id="size-display"></span></div>
+                    <div class="sizes">
+                        <div id="small" class="size-button size-active">S</div>
+                        <div id="medium" class="size-button">M</div>
+                        <div id="large" class="size-button">L</div>
+                        <div id="xlarge" class="size-button">XL</div>
+                    </div>
+                    <div class="price">Loading...</div>
+                    <div class="addtocart">
+                        <button class="add-cart-btn">ADD TO CART</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div style="text-align: center;width: 100%;height: 50px;line-height: 50px;">BENSHOPPE &copy; 2024 | Mark Benson Matanguihan</div>
+
+    <script src="toaster.js" type="module"></script>
+    <script type="module">
+        import { showToast } from './toaster.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sizeButtons = document.querySelectorAll('.size-button');
+            const sizeDisplay = document.getElementById('size-display');
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const cartCountElement = document.getElementById('cart-count');
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const addCartBtn = document.querySelector('.add-cart-btn');
+            const isLoggedIn = sessionStorage.getItem('username') !== null;
+
+            fetch('products.json')
+                .then(response => response.json())
+                .then(data => {
+                    const product = data.find(item => item.id == productId);
+
+                    if (product) {
+                  
+                        document.querySelector('.breadcrumb-current').textContent = product.name;
+                        document.querySelector('.image').style.backgroundImage = `url('${product.image}')`;
+                        document.querySelector('.description .title h1').textContent = product.name;
+                        document.querySelector('.description .ratings a').textContent = `${product.reviews}`;
+                        document.querySelector('.price').textContent = `$${product.price}`;
+                    } else {
+
+                        console.error('Product not found:', productId);
+                    }
+
+                    sizeDisplay.textContent = 'Small'; 
+
+                    sizeButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            sizeButtons.forEach(btn => btn.classList.remove('size-active'));
+
+                            button.classList.add('size-active');
+
+                            const sizeText = {
+                                small: 'Small',
+                                medium: 'Medium',
+                                large: 'Large',
+                                xlarge: 'X-Large'
+                            };
+
+                            sizeDisplay.textContent = sizeText[button.id];
+                            sizeDisplay.classList.remove('animate');
+                            void sizeDisplay.offsetWidth; 
+                            sizeDisplay.classList.add('animate');
+                        });
+                    });
+
+                    addCartBtn.addEventListener('click', () => {
+                        if (!isLoggedIn) {
+                            showToast('Please log in first before adding to cart.', true);
+                            return;
+                        }
+
+                        const cartItem = {
+                            id: product.id,
+                            name: product.name,
+                            image: product.image,
+                            price: product.price,
+                            category: product.category,
+                            reviews: product.reviews,
+                            quantity: 1
+                        };
+
+                        const existingItem = cart.find(item => item.id === cartItem.id);
+                        if (existingItem) {
+                            existingItem.quantity += 1;
+                        } else {
+                            cart.push(cartItem);
+                        }
+
+                        localStorage.setItem('cart', JSON.stringify(cart));
+
+                        updateCartCount();
+
+                        showToast('Item added to cart!');
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching product details:', error);
+                });
+
+            function updateCartCount() {
+                cartCountElement.textContent = cart.length; 
+            }
+
+            updateCartCount();
+        });
+    </script>
+
+    <script src="showprofile.js"></script>
+</body>
+
+</html>

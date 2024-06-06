@@ -1,0 +1,67 @@
+body{
+    overflow: hidden;
+}
+main{
+    width: 80%;
+    margin: 0 auto;
+    
+    margin-top: 120px;
+}
+main .product-details{
+    display: flex;
+    gap: 20px
+}
+main .product-details .image{
+    height: 500px;
+    width: 40%;
+    border: 3px solid #ddd;
+    background-position: center;
+    background-size: 400px 400px;
+    background-repeat: no-repeat;
+}
+a{
+    text-decoration: none;
+}
+.sizes{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.ratings a{
+    color: black;
+}
+.size-info{
+    margin-bottom: 10px;
+}
+.price{
+    font-size: 50px;
+    color: red;
+    font-weight: bold;
+}
+.size-active{
+    border: 1px solid red !important;
+}
+.ratings{
+    margin-bottom: 20px;
+}
+
+.sizes > div{
+    border: 1px solid #000;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+}
+@keyframes slide-up {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate {
+    animation: slide-up .5s ease-in-out;
+}

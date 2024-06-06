@@ -1,0 +1,162 @@
+[
+    {
+        "id": "1",
+        "name": "Plain T-Shirt",
+        "category": "Shirt",
+        "price": 10,
+        "image": "img/shirt/1.png",
+        "reviews": "★★★★☆"
+    },
+    {
+        "id": "2",
+        "name": "Graphic Hoodie",
+        "category": "Hoodie",
+        "price": 25,
+        "image": "img/hoodies/1.png",
+        "reviews": "★★★☆☆"
+    },
+    {
+        "id": "3",
+        "name": "Leather Jacket",
+        "category": "Jacket",
+        "price": 50,
+        "image": "img/jackets/1.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "4",
+        "name": "Casual Sweater",
+        "category": "Sweater",
+        "price": 35,
+        "image": "img/sweaters/1.png",
+        "reviews": "★★★☆☆"
+    },
+    {
+        "id": "5",
+        "name": "Striped T-Shirt",
+        "category": "Shirt",
+        "price": 12,
+        "image": "img/shirt/2.png",
+        "reviews": "★★☆☆☆"
+    },
+    {
+        "id": "6",
+        "name": "Zip-Up Hoodie",
+        "category": "Hoodie",
+        "price": 30,
+        "image": "img/hoodies/2.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "7",
+        "name": "Denim Jacket",
+        "category": "Jacket",
+        "price": 60,
+        "image": "img/jackets/2.png",
+        "reviews": "★★★☆☆"
+    },
+    {
+        "id": "8",
+        "name": "Knit Sweater",
+        "category": "Sweater",
+        "price": 40,
+        "image": "img/sweaters/2.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "9",
+        "name": "V-Neck T-Shirt",
+        "category": "Shirt",
+        "price": 15,
+        "image": "img/shirt/3.png",
+        "reviews": "★★★☆☆"
+    },
+    {
+        "id": "10",
+        "name": "Pullover Hoodie",
+        "category": "Hoodie",
+        "price": 28,
+        "image": "img/hoodies/3.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "11",
+        "name": "Bomber Jacket",
+        "category": "Jacket",
+        "price": 55,
+        "image": "img/jackets/3.png",
+        "reviews": "★★★★☆"
+    },
+    {
+        "id": "12",
+        "name": "Cable-Knit Sweater",
+        "category": "Sweater",
+        "price": 45,
+        "image": "img/sweaters/3.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "13",
+        "name": "Printed T-Shirt",
+        "category": "Shirt",
+        "price": 18,
+        "image": "img/shirt/4.png",
+        "reviews": "★★★☆☆"
+    },
+    {
+        "id": "14",
+        "name": "Hooded Sweatshirt",
+        "category": "Hoodie",
+        "price": 32,
+        "image": "img/hoodies/4.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "15",
+        "name": "Parka Jacket",
+        "category": "Jacket",
+        "price": 65,
+        "image": "img/jackets/4.png",
+        "reviews": "★★★★☆"
+    },
+    {
+        "id": "16",
+        "name": "Crewneck Sweater",
+        "category": "Sweater",
+        "price": 38,
+        "image": "img/sweaters/4.png",
+        "reviews": "★★☆☆☆"
+    },
+    {
+        "id": "17",
+        "name": "Button-Up Shirt",
+        "category": "Shirt",
+        "price": 20,
+        "image": "img/shirt/5.png",
+        "reviews": "★★★★☆"
+    },
+    {
+        "id": "18",
+        "name": "Fleece Hoodie",
+        "category": "Hoodie",
+        "price": 29,
+        "image": "img/hoodies/5.png",
+        "reviews": "★★★☆☆"
+    },
+    {
+        "id": "19",
+        "name": "Leather Bomber Jacket",
+        "category": "Jacket",
+        "price": 70,
+        "image": "img/jackets/5.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "20",
+        "name": "Cropped Sweater",
+        "category": "Sweater",
+        "price": 42,
+        "image": "img/sweaters/5.png",
+        "reviews": "★★☆☆☆"
+    }
+]

@@ -1,0 +1,38 @@
+[
+    {
+        "id": "21",
+        "name": "T-shirt Crew Neck",
+        "category": "Shirt",
+        "price": 50,
+        "discounted_price": 45,
+        "image": "img/offers/1.png",
+        "reviews": "★★★★★"
+    },
+    {
+        "id": "22",
+        "name": "Red Polo Shirt",
+        "category": "Shirt",
+        "price": 120,
+        "discounted_price": 108,
+        "image": "img/offers/2.png",
+        "reviews": "★★★★☆"
+    },
+    {
+        "id": "24",
+        "name": "Long-sleeved T-shirt ",
+        "category": "Shirt",
+        "price": 35,
+        "discounted_price": 31.5,
+        "image": "img/offers/3.png",
+        "reviews": "★★★☆☆"
+    },
+    {
+        "id": "25",
+        "name": "Hoodie T-shirt Red Bluza",
+        "category": "Hoodie",
+        "price": 25,
+        "discounted_price": 22.5,
+        "image": "img/offers/4.png",
+        "reviews": "★★★★★"
+    }
+]

@@ -1,0 +1,16 @@
+{
+    "name": "Mark Benson Matanguihan",
+    "username": "benson",
+    "password": "benson123",
+    "address": {
+      "street": "Joson St.",
+      "barangay" : "Leido",
+      "municipality" : "Victoria",
+      "city": "Calapan",
+      "province": "Oriental Mindoro",
+      "zip": "5205"
+    },
+    "dob": "November 9, 2001",
+    "profilePic": "img/profile.jpg"
+  }
+  

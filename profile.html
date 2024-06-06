@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BENSHOPPE | Profile</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="boxicons-2.1.4/css/boxicons.min.css" />
+    <style>
+        .orders {
+            width: 80%;
+            margin: 0 auto;
+            margin-left: 20%;
+        }
+
+        .order {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 20px;
+        }
+
+        .order h3 {
+            margin: 0 0 10px;
+        }
+
+        .order img {
+            width: 50px;
+            border: 1px solid #ddd;
+            padding: 5px;
+        }
+
+        .order-detail {
+            display: flex;
+            padding: 10px;
+            gap: 20px;
+        }
+
+        .profile-main {
+            display: flex;
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 100px;
+            margin-bottom: 400px;
+        }
+
+        .user-profile-container {
+            width: 20%;
+            position: fixed;
+        }
+
+        .user-profile-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-profile-container li {
+            margin: 10px 0;
+        }
+
+        .user-profile-container a {
+            text-decoration: none;
+            color: blue;
+            cursor: pointer;
+        }
+
+        .user-profile-container a.active {
+            color: red;
+        }
+
+        .total {
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: red;
+            color: white;
+            border-color: red;
+        }
+
+        .pagination button:hover {
+            background-color: red;
+            color: white;
+            border-color: red;
+        }
+
+        .profile-info-banner {
+            width: 100%;
+            background-color: red;
+            height: 200px;
+        }
+
+        #image {
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-top: -80px;
+            margin-left: 20px;
+            border: 5px solid white;
+        }
+
+        #image img {
+            width: 100%;
+        }
+
+        .profile-info-detail {
+            display: flex;
+        }
+
+        .profile-info-detail h1 {
+            font-size: 50px;
+        }
+
+        .profile-info-detail p {
+            color: #999;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div><a href="index.html" class="logo">BENSHOPPE</a></div>
+        <div class="user">
+            <div id="user-profile-container"></div>
+            <a href="cart.html"><i class="bx bx-cart"></i><span id="cart-count">0</span></a>
+        </div>
+    </header>
+    <div class="profile-main">
+        <div class="user-profile-container">
+            <ul>
+                <li><a id="profile-info-link" class="active">Profile Info</a></li>
+                <li><a id="your-orders-link">Your Orders</a></li>
+                <li><a id="logout-link">Logout</a></li>
+            </ul>
+        </div>
+        <div class="orders">
+            <div id="profile-info">
+                <div class="profile-info-banner"></div>
+                <div class="profile-info-detail">
+                    <div id="image"></div>
+                    <div>
+                        <h1 id="full-name"></h1>
+                        <p id="username"></p>
+                        <h3 id="address"></h3>
+                    </div>
+                </div>
+                
+            </div>
+            <div id="orders-section" style="display: none">
+                <h1>Your Orders</h1>
+                <div id="orders-container"></div>
+                <div id="pagination" class="pagination"></div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center;width: 100%;height: 50px;line-height: 50px;">BENSHOPPE &copy; 2024 | Mark Benson Matanguihan</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ordersContainer = document.getElementById("orders-container");
+            const ordersSection = document.getElementById("orders-section");
+            const profileInfoSection = document.getElementById("profile-info");
+            const usernameElement = document.getElementById("username");
+            const fullNameElement = document.getElementById("full-name");
+            const addressElement = document.getElementById("address");
+            const imageElement = document.getElementById("image");
+            const orders = JSON.parse(localStorage.getItem("orders")) || [];
+            const profileInfoLink = document.getElementById("profile-info-link");
+            const yourOrdersLink = document.getElementById("your-orders-link");
+            const logoutLink = document.getElementById("logout-link");
+            const cartCountElement = document.getElementById("cart-count");
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            function displayOrders() {
+                ordersContainer.innerHTML = "";
+                if (orders.length === 0) {
+                    ordersContainer.innerHTML = "<p>You have no orders.</p>";
+                    return;
+                }
+
+                orders.forEach((order) => {
+                    const orderElement = document.createElement("div");
+                    orderElement.className = "order";
+                    orderElement.innerHTML = `
+                        <h3>Order Date: ${new Date(
+                        order.date
+                    ).toLocaleString()}</h3>
+                        <div>
+                            ${order.items
+                            .map(
+                                (item) => `
+                                <div class="order-detail">
+                                    <img src="${item.image}">
+                                    <div>
+                                        <p>${item.name}</p>
+                                        <p>$${item.price}</p>
+                                        <p>(Quantity: ${item.quantity || 0})</p>
+                                    </div>
+                                </div>
+                            `
+                            )
+                            .join("")}
+                        </div>
+                        <hr/>
+                        <p class="total">Total: $${order.total}</p>
+                    `;
+                    ordersContainer.appendChild(orderElement);
+                });
+            }
+
+            function displayProfileInfo() {
+                fetch("user.json")
+                    .then((response) => response.json())
+                    .then((user) => {
+                        usernameElement.textContent = `@${user.username}`;
+                        fullNameElement.textContent = `${user.name}`;
+                        addressElement.textContent = `${user.address.street}, ${user.address.barangay}, ${user.address.municipality}, ${user.address.province}, ${user.address.zip}`;
+                        image.innerHTML = `<img src="${user.profilePic}">`;
+                    });
+            }
+
+            function setActiveLink(link) {
+                document
+                    .querySelectorAll(".user-profile-container a")
+                    .forEach((a) => a.classList.remove("active"));
+                link.classList.add("active");
+            }
+
+            function updateCartCount() {
+                cartCountElement.textContent = cart.length;
+            }
+
+            profileInfoLink.addEventListener("click", function () {
+                ordersSection.style.display = "none";
+                profileInfoSection.style.display = "block";
+                setActiveLink(profileInfoLink);
+                displayProfileInfo();
+            });
+
+            yourOrdersLink.addEventListener("click", function () {
+                profileInfoSection.style.display = "none";
+                ordersSection.style.display = "block";
+                setActiveLink(yourOrdersLink);
+                displayOrders();
+            });
+
+            logoutLink.addEventListener("click", function () {
+                sessionStorage.clear(); 
+                window.location.href = "index.html"; 
+            });
+
+            displayProfileInfo();
+            updateCartCount();
+            profileInfoSection.style.display = "block";
+        });
+    </script>
+    <script src="showprofile.js"></script>
+</body>
+
+</html>

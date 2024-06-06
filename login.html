@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BENSHOPPE | LOGIN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: inter;
+        }
+
+        .login-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 300px;
+            height: 340px;
+        }
+
+        .login-container label {
+            display: block;
+        }
+
+        .login-container h2 {
+            text-align: center;
+        }
+
+        input {
+            height: 40px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: red;
+        }
+
+        button {
+            height: 50px;
+            width: 50%;
+            background-color: red;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>BENSHOPPE</h1>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <div>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <center><button type="submit">Login</button></center>
+        </form>
+        <center>
+            <p id="login-message"></p>
+        </center>
+    </div>
+    <div style="text-align: center;width: 100%;height: 50px;line-height: 50px;">BENSHOPPE &copy; 2024 | Mark Benson Matanguihan</div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('user.json')
+                .then(response => response.json())
+                .then(data => {
+                    const { username: storedUsername, password: storedPassword } = data;
+                    if (username === storedUsername && password === storedPassword) {
+                   
+                        sessionStorage.setItem('username', username);
+                        document.getElementById('login-message').textContent = 'Login successful!';
+               
+                        window.location.href = 'index.html';
+                    } else {
+                        document.getElementById('login-message').textContent = 'Invalid username or password!';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                    document.getElementById('login-message').textContent = 'Failed to login. Please try again later.';
+                });
+        });
+    </script>
+</body>
+
+</html>

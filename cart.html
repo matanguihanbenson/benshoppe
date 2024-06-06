@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BENSHOPPE | Cart</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="boxicons-2.1.4/css/boxicons.min.css" />
+    <style>
+        .cart {
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 120px;
+        }
+
+        .cart-item {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-item.selected {
+            border-color: green;
+        }
+
+        .cart-item img {
+            max-width: 100px;
+            margin-right: 20px;
+        }
+
+        .cart-item .details {
+            flex-grow: 1;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: red;
+            color: white;
+            border-color: red;
+        }
+
+        .pagination button:hover {
+            background-color: red;
+            color: white;
+            border-color: red;
+        }
+
+        .checkout-popup,
+        .success-popup,
+        .no-selection-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .checkout-popup {
+            width: 700px;
+            padding-inline: 40px;
+        }
+
+        .checkout-popup #payment-method {
+            margin-top: 10px;
+        }
+
+        .checkout-popup h2 {
+            margin-bottom: 10px;
+        }
+
+        #checkout-items {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #checkout-items img {
+            width: 50px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            height: 50px;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .cart-item .checkmark {
+            display: none;
+            margin-left: auto;
+            color: green;
+            font-size: 24px;
+        }
+
+        .cart-item.selected .checkmark {
+            display: block;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #checkout-btn {
+            background-color: red;
+            border: none;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+        }
+
+        #checkout-btn:hover {
+            opacity: 0.6;
+        }
+
+        .cart-empty {
+            width: 100%;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-empty img {
+            width: 100px;
+        }
+
+        .payment-method-btn {
+            border: 1px solid #ddd;
+            background-color: white;
+            padding: 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: relative;
+            width: 160px;
+        }
+
+        .payment-method-btn.active {
+            border-color: green;
+        }
+
+        .payment-method-btn .checkmark {
+            display: none;
+            color: green;
+            font-size: 16px;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .payment-method-btn.active .checkmark {
+            display: block;
+        }
+
+        .success-popup h2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .no-selection-popup {
+            text-align: center;
+        }
+
+        .success-popup .checkmark {
+            color: green;
+            text-align: center;
+            border: 1px solid green;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .check-mark {
+            width: 100%;
+            text-align: center;
+
+            font-size: 100px;
+        }
+
+        #close-success-btn,
+        #close-no-selection-btn {
+            background-color: red;
+            color: white;
+            width: 100px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .close-button-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .bx-x {
+            color: red;
+            text-align: center;
+            border: 1px solid red;
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .checkout-item {
+            display: flex;
+            gap: 20px;
+        }
+
+        .checkout-total {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .checkout-popup #confirm-checkout-btn,
+        .checkout-popup #cancel-checkout-btn {
+            height: 40px;
+            padding-inline: 20px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
+
+        .checkout-popup #confirm-checkout-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .remove-from-cart-btn {
+            padding-inline: 30px;
+            height: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div><a href="index.html" class="logo">BENSHOPPE</a></div>
+        <div class="user">
+            <div id="user-profile-container"></div>
+            <a href="cart.html"><i class="bx bx-cart"></i><span id="cart-count">0</span></a>
+        </div>
+    </header>
+
+    <div class="cart">
+        <div class="cart-header">
+            <h1>Your Cart</h1>
+            <button id="checkout-btn">Checkout</button>
+        </div>
+        <div id="cart-container"></div>
+        <div id="pagination" class="pagination"></div>
+    </div>
+
+    <div class="popup-overlay" id="popup-overlay"></div>
+
+    <div class="checkout-popup" id="checkout-popup">
+        <h2>Checkout</h2>
+        <hr />
+        <div id="checkout-items"></div>
+        <p class="checkout-total">Total: $<span id="checkout-total"></span></p>
+        <label for="payment-method">Payment Method:</label>
+        <div id="payment-method">
+            <button class="payment-method-btn" data-method="credit-card">
+                Credit Card <i class="bx bx-check checkmark"></i>
+            </button>
+            <button class="payment-method-btn" data-method="paypal">
+                PayPal <i class="bx bx-check checkmark"></i>
+            </button>
+            <button class="payment-method-btn" data-method="cash-on-delivery">
+                Cash on Delivery <i class="bx bx-check checkmark"></i>
+            </button>
+        </div>
+        <br />
+        <hr />
+        <br />
+        <button id="confirm-checkout-btn">Confirm</button>
+        <button id="cancel-checkout-btn">Cancel</button>
+    </div>
+
+    <div class="success-popup" id="success-popup">
+        <div class="check-mark"><i class="bx bx-check checkmark"></i></div>
+        <h2>Success!</h2>
+        <p>Your order has been placed successfully.</p>
+        <div class="close-button-container">
+            <button id="close-success-btn">Close</button>
+        </div>
+    </div>
+
+    <div class="no-selection-popup" id="no-selection-popup">
+        <div class="check-mark"><i class="bx bx-x"></i></div>
+        <h2>No Items Selected</h2>
+        <p>Please select items to checkout.</p>
+        <div class="close-button-container">
+            <button id="close-no-selection-btn">Close</button>
+        </div>
+    </div>
+    <div style="text-align: center;width: 100%;height: 50px;line-height: 50px;">BENSHOPPE &copy; 2024 | Mark Benson Matanguihan</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const cartContainer = document.getElementById("cart-container");
+            const paginationContainer = document.getElementById("pagination");
+            const cartCountElement = document.getElementById("cart-count");
+            const checkoutPopup = document.getElementById("checkout-popup");
+            const successPopup = document.getElementById("success-popup");
+            const noSelectionPopup = document.getElementById("no-selection-popup");
+            const popupOverlay = document.getElementById("popup-overlay");
+            const checkoutItemsContainer =
+                document.getElementById("checkout-items");
+            const checkoutTotalElement = document.getElementById("checkout-total");
+            const checkoutBtn = document.getElementById("checkout-btn");
+            const confirmCheckoutBtn = document.getElementById(
+                "confirm-checkout-btn"
+            );
+            const cancelCheckoutBtn = document.getElementById(
+                "cancel-checkout-btn"
+            );
+            const closeSuccessBtn = document.getElementById("close-success-btn");
+            const closeNoSelectionBtn = document.getElementById(
+                "close-no-selection-btn"
+            );
+            const paymentMethodButtons = document.querySelectorAll(
+                ".payment-method-btn"
+            );
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const itemsPerPage = 5;
+            let currentPage = 1;
+            let selectedItems = [];
+            let selectedPaymentMethod = "";
+
+            function displayCartItems(page) {
+                cartContainer.innerHTML = "";
+                if (cart.length === 0) {
+                    cartContainer.innerHTML =
+                        '<div class="cart-empty"><img src="img/empty-cart.png"><p>Your cart is empty.</p></div>';
+                    paginationContainer.innerHTML = "";
+                    checkoutBtn.style.display = "none";
+                    return;
+                }
+
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = Math.min(startIndex + itemsPerPage, cart.length);
+                const itemsToDisplay = cart.slice(startIndex, endIndex);
+
+                itemsToDisplay.forEach((item) => {
+                    const quantity = item.quantity || 0;
+
+                    const cartItemElement = document.createElement("div");
+                    cartItemElement.className = "cart-item";
+                    cartItemElement.dataset.id = item.id;
+                    cartItemElement.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="details">
+                            <h3>${item.name}</h3>
+                            <p class="cat">${item.category}</p>
+                            <p class="price">$${item.price} (Quantity: ${quantity})</p>
+                            <p class="review">${item.reviews}</p>
+                            <button class="remove-from-cart-btn" data-id="${item.id}">Remove</button>
+                        </div>
+                        <i class="bx bx-check checkmark"></i>
+                    `;
+                    cartContainer.appendChild(cartItemElement);
+
+                    cartItemElement.addEventListener("click", function () {
+                        if (cartItemElement.classList.toggle("selected")) {
+                            selectedItems.push(item);
+                        } else {
+                            selectedItems = selectedItems.filter((i) => i.id !== item.id);
+                        }
+                    });
+                });
+
+                const removeFromCartButtons = document.querySelectorAll(
+                    ".remove-from-cart-btn"
+                );
+                removeFromCartButtons.forEach((button) => {
+                    button.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                        const productId = this.getAttribute("data-id");
+                        removeFromCart(productId);
+                    });
+                });
+
+                displayPagination();
+            }
+
+            function displayPagination() {
+                paginationContainer.innerHTML = "";
+                const pageCount = Math.ceil(cart.length / itemsPerPage);
+
+                for (let i = 1; i <= pageCount; i++) {
+                    const button = document.createElement("button");
+                    button.textContent = i;
+                    button.classList.add("pagination-btn");
+                    if (i === currentPage) {
+                        button.classList.add("active");
+                    }
+                    button.addEventListener("click", function () {
+                        currentPage = i;
+                        displayCartItems(currentPage);
+                    });
+                    paginationContainer.appendChild(button);
+                }
+            }
+
+            function removeFromCart(productId) {
+                cart = cart.filter((item) => item.id !== productId);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartCount();
+                displayCartItems(currentPage);
+            }
+
+            function updateCartCount() {
+                cartCountElement.textContent = cart.length;
+            }
+
+            function showPopup(popup) {
+                popupOverlay.style.display = "block";
+                popup.style.display = "block";
+            }
+
+            function hidePopup(popup) {
+                popupOverlay.style.display = "none";
+                popup.style.display = "none";
+            }
+
+            function openCheckoutPopup() {
+                if (selectedItems.length === 0) {
+                    showPopup(noSelectionPopup);
+                    return;
+                }
+                checkoutItemsContainer.innerHTML = "";
+                let total = 0;
+
+                selectedItems.forEach((item) => {
+                    const quantity = item.quantity || 0;
+                    const itemTotal = item.price * quantity;
+                    total += itemTotal;
+
+                    const checkoutItemElement = document.createElement("div");
+                    checkoutItemElement.className = "checkout-item";
+                    checkoutItemElement.innerHTML = `
+                        <div><img src="${item.image}"></div>
+                        <div>
+                            <p>${item.name}</p>
+                            <p>$${item.price} x ${quantity} = $${itemTotal}</p>
+                        </div>
+                    `;
+                    checkoutItemsContainer.appendChild(checkoutItemElement);
+                });
+
+                checkoutTotalElement.textContent = total.toFixed(2);
+                showPopup(checkoutPopup);
+            }
+
+            function confirmCheckout() {
+                const orders = JSON.parse(localStorage.getItem("orders")) || [];
+                const order = {
+                    items: selectedItems,
+                    total: checkoutTotalElement.textContent,
+                    date: new Date().toISOString(),
+                    paymentMethod: selectedPaymentMethod,
+                };
+                orders.push(order);
+                localStorage.setItem("orders", JSON.stringify(orders));
+
+                selectedItems.forEach((item) => {
+                    removeFromCart(item.id);
+                });
+                selectedItems = [];
+                hidePopup(checkoutPopup);
+                showPopup(successPopup);
+            }
+
+            paymentMethodButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    paymentMethodButtons.forEach((btn) =>
+                        btn.classList.remove("active")
+                    );
+                    this.classList.add("active");
+                    selectedPaymentMethod = this.dataset.method;
+                });
+            });
+
+            checkoutBtn.addEventListener("click", openCheckoutPopup);
+            confirmCheckoutBtn.addEventListener("click", confirmCheckout);
+            cancelCheckoutBtn.addEventListener("click", function () {
+                hidePopup(checkoutPopup);
+            });
+            closeSuccessBtn.addEventListener("click", function () {
+                hidePopup(successPopup);
+            });
+            closeNoSelectionBtn.addEventListener("click", function () {
+                hidePopup(noSelectionPopup);
+            });
+
+            updateCartCount();
+            displayCartItems(currentPage);
+        });
+    </script>
+    <script src="showprofile.js"></script>
+</body>
+
+</html>
