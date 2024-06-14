@@ -13,6 +13,9 @@ BLUE - #4267B3
   margin: 0;
   box-sizing: border-box;
 }
+img{
+  image-rendering: optimizeSpeed !important;
+}
 body {
   font-family: inter;
   height: 1000px;
